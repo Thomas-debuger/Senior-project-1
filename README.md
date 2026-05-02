@@ -125,14 +125,14 @@
 
 這個時間點要做一次判斷：
 
-| 結果狀況                  | 投稿故事                                                |
-| --------------------- | --------------------------------------------------- |
-| LS vs NL 很好           | 主打 lesional-like immune activation classification   |
-| AD vs PSO 很好          | 加強 disease-specific immune phenotype classification |
-| ssGSEA 比 gene only 更穩 | 主打 immune-abundance framework                       |
-| combined features 最好  | 主打 multi-level transcriptomic + immune profiling    |
-| 外部驗證成功                | 主打 robust cross-cohort immune signature             |
-| 外部驗證不穩                | 改成 exploratory short paper，誠實寫 limitation           |
+| 結果狀況 | 投稿故事 |
+|---|---|
+| LS vs NL 在 repeated CV 中表現穩定，且外部資料趨勢支持 | 主打 lesional-like immune activation classification，強調可辨識病灶樣本與非病灶樣本的免疫活化差異 |
+| AD vs PSO 任務表現穩定 | 加強 disease-specific immune phenotype classification，說明 AD 與 PSO 具有不同免疫表型 |
+| ssGSEA features 比 gene-only features 更穩定或更可解釋 | 主打 immune-abundance-based framework，強調免疫豐度特徵比單純基因表現更具解釋性與穩定性 |
+| combined features 在 repeated CV 與外部驗證中皆表現較佳 | 主打 multi-level transcriptomic and immune-abundance profiling framework，強調結合 gene expression 與 immune signatures 可提升模型表現與泛化能力 |
+| GSE154200 外部驗證成功，且 GSE140227 / GSE14905 有部分 signature replication | 主打 robust cross-cohort immune signature discovery，強調主要免疫特徵可在不同資料集中重現 |
+| 外部驗證不穩，但內部 CV 與 SHAP 結果仍有合理生物意義 | 改成 exploratory short paper，誠實寫 limitation，主打初步發現與可解釋框架，不過度宣稱泛化能力 |
 
 ---
 
