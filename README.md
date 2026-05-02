@@ -136,6 +136,7 @@
 
 
 但 short paper 不要放太大表格：   
+
 BigComp short paper 頁數很短，所以正式論文裡不要放我剛剛那種很大的完整表格。   
 正式 paper 裡建議放簡化版：   
 | Feature set | Best model | ROC-AUC | PR-AUC | F1 | Stability | External trend |
@@ -151,6 +152,7 @@ Stability：可以寫 High / Medium / Low，或用 std 表示
 External trend：寫 Consistent / Partially consistent / Not consistent   
 
 這樣 4 頁比較塞得下。
+
 ---
 
 # Phase 3：8 月
