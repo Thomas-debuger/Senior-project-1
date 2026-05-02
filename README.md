@@ -1,4 +1,4 @@
-# Senior-projecu
+# Senior-project
 
 下面是把兩件事合併後的 **BigComp short paper 最高通過率最終時程表**：
 
