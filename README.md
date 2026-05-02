@@ -115,7 +115,7 @@
 | 成果                                         | 是否必須   |
 | ------------------------------------------ | ------ |
 | GSE121212 主任務 LS vs NL 模型比較表               | 必須     |
-| ssGSEA / gene / combined feature 比較        | 必須     |
+| ssGSEA / gene / combined feature 的效能、穩定性與外部驗證趨勢比較        | 必須     |
 | repeated CV 平均值 ± 標準差                      | 必須     |
 | ROC-AUC、PR-AUC、F1、Accuracy                 | 必須     |
 | confusion matrix                           | 必須     |
