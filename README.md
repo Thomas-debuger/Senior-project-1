@@ -101,7 +101,7 @@
 | 週次      |       時間 |    工時 | 本週目標                       | 必須交出的成果                                            |
 | ------- | -------: | ----: | -------------------------- | -------------------------------------------------- |
 | Week 8  | 7 月第 1 週 | 22 小時 | 正式重跑主任務 LS vs NL           | Logistic、SVM、RF、XGBoost、LightGBM 的正式結果             |
-| Week 9  | 7 月第 2 週 | 24 小時 | 做 feature set performance and stability comparison   | ssGSEA only、gene only、combined features 比較表        |
+| Week 9  | 7 月第 2 週 | 24 小時 | 做 feature set performance and stability comparison   | ssGSEA only、gene only、combined features 的 performance、stability、external validation trend 比較表        |
 | Week 10 | 7 月第 3 週 | 24 小時 | 做副任務                       | AD vs PSO、AD-LS vs PSO-LS、AD-NL vs PSO-NL          |
 | Week 11 | 7 月第 4 週 | 26 小時 | 做 repeated CV / robustness | repeated 5-fold CV、多 random seed、ROC-AUC、PR-AUC、F1 |
 | Week 12 |     7 月底 | 26 小時 | 做外部資料集初步驗證                 | GSE154200 或其他外部 dataset 的初版驗證結果                    |
