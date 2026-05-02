@@ -134,6 +134,24 @@
 | GSE154200 外部驗證成功，且 GSE140227 / GSE14905 有部分 signature replication | 主打 robust cross-cohort immune signature discovery，強調主要免疫特徵可在不同資料集中重現 |
 | 外部驗證不穩，但內部 CV 與 SHAP 結果仍有合理生物意義 | 改成 exploratory short paper，誠實寫 limitation，主打初步發現與可解釋框架，不過度宣稱泛化能力 |
 
+
+但 short paper 不要放太大表格
+
+BigComp short paper 頁數很短，所以正式論文裡不要放我剛剛那種很大的完整表格。
+正式 paper 裡建議放簡化版：
+| Feature set | Best model | ROC-AUC | PR-AUC | F1 | Stability | External trend |
+| ----------- | ---------- | ------: | -----: | -: | --------- | -------------- |
+| Gene only   |            |         |        |    |           |                |
+| ssGSEA only |            |         |        |    |           |                |
+| Combined    |            |         |        |    |           |                |
+
+其中：
+
+ROC-AUC / PR-AUC / F1：放 repeated CV 的 mean ± std
+Stability：可以寫 High / Medium / Low，或用 std 表示
+External trend：寫 Consistent / Partially consistent / Not consistent
+
+這樣 4 頁比較塞得下。
 ---
 
 # Phase 3：8 月
