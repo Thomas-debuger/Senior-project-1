@@ -17,11 +17,11 @@
 
 而要寫成：
 
-> **An Interpretable Immune-Abundance-Based Machine Learning Framework for Lesional-like Risk Stratification in Atopic Dermatitis and Psoriasis**
+> **An Interpretable Machine Learning Framework Integrating Immune Cell Abundance and Transcriptomic Profiles for Lesional-like Risk Stratification in Inflammatory Skin Diseases**
 
 中文意思：
 
-> **基於免疫細胞豐度的可解釋機器學習框架，用於異位性皮膚炎與乾癬之病灶化免疫風險分層。**
+> **整合免疫細胞豐度與轉錄體資料之可解釋機器學習框架：應用於皮膚發炎疾病之病灶化風險分層**
 
 這樣可以同時扣住：
 
