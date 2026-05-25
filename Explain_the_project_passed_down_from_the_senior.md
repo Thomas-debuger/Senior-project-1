@@ -1609,3 +1609,295 @@ Healthy cluster ---- NL samples ---- LS cluster
 > 輸入單一皮膚樣本的基因表現資料或 ssGSEA 免疫特徵分數，模型首先判斷其疾病類型為 AD 或 PSO，接著判斷其皮膚狀態為 Healthy、NL 或 LS；若樣本屬於 NL，則進一步根據其分子特徵接近 LS 的程度，評估其 lesional-like risk，並分為低、中、高風險。
 
 這樣比較像正式研究方法，也不會過度宣稱真的能預測未來一定惡化。
+
+---
+
+### Q3：用資料集GSE121212 RNA-seq cohort
+```
+Groups:
+1. AD_LS
+2. AD_NL
+3. PSO_LS
+4. PSO_NL
+5. Healthy
+
+DESeq2 比較 DEGs:
+1. AD_LS vs AD_NL(上周已做完)
+2. AD_LS vs Healthy(上周已做完)
+3. AD_NL vs Healthy(上周已做完)
+4. PSO_LS vs PSO_NL
+5. PSO_LS vs Healthy
+6. PSO_NL vs Healthy
+7. PSO_LS vs AD_LS
+8. PSO_NL vs AD_NL
+
+Overlap 分析:
+9. Compare AD-vs-Healthy DEGs and PSO-vs-Healthy DEGs,
+especially:
+AD_LS_up ∩ PSO_LS_up
+AD_LS_down ∩PSO_LS_down
+AD_LS_up ∩ PSO_LS_down
+AD_LS_down ∩ PSO_LS_up
+
+這樣會做太多嗎，因為我們現在也不確定到底哪些結果之後會用得到，哪些結果之後用不到，所以也沒辦法確定哪些該做哪些不該做
+```
+不會太多。以你們現在「還不確定哪些結果未來會用到」的狀態來說，**先把 8 組 DESeq2 + overlap 做出來是合理的**，而且這不是亂做，是有邏輯的完整比較矩陣。
+
+但你報告或專題主軸不要把 9 項全部都當成「同等重要」。比較好的做法是：
+
+> **全部先跑出來當 exploratory analysis，但主線只放 3～4 個核心比較，其他當補充結果或後續分析依據。**
+
+---
+
+# 一、這樣會不會做太多？
+
+以 DESeq2 來說，**8 組 DEG 比較其實不算太多**。
+
+因為你們的 group 只有 5 組：
+
+```text
+AD_LS
+AD_NL
+PSO_LS
+PSO_NL
+Healthy
+```
+
+你現在列的比較不是亂槍打鳥，而是圍繞三個問題：
+
+```text
+1. AD 內部：LS、NL、Healthy 差在哪？
+2. PSO 內部：LS、NL、Healthy 差在哪？
+3. AD 與 PSO：同樣狀態下兩種疾病差在哪？
+```
+
+所以邏輯上是完整的。
+
+真正要避免的是：**做了很多結果，但不知道每個比較要回答什麼問題。**
+
+---
+
+# 二、我建議你把 8 組比較分成「核心」、「重要」、「補充」
+
+## 第一層：核心比較，最應該做
+
+這 4 個是主線，跟你們題目最直接相關：
+
+| 比較                | 重要性 | 目的                  |
+| ----------------- | --: | ------------------- |
+| AD_LS vs AD_NL    |  核心 | 找 AD 病灶化相關基因        |
+| PSO_LS vs PSO_NL  |  核心 | 找 PSO 病灶化相關基因       |
+| AD_LS vs Healthy  |  核心 | 找 AD 病灶皮膚相對健康的發炎特徵  |
+| PSO_LS vs Healthy |  核心 | 找 PSO 病灶皮膚相對健康的發炎特徵 |
+
+你們上週已經做完前三個，所以現在最優先應該補：
+
+```text
+4. PSO_LS vs PSO_NL
+5. PSO_LS vs Healthy
+```
+
+這兩個一補完，你們就有 AD 和 PSO 的對稱比較了。
+
+---
+
+## 第二層：重要比較，建議做
+
+這 3 個是非常有用的延伸：
+
+| 比較                | 重要性 | 目的                |
+| ----------------- | --: | ----------------- |
+| AD_NL vs Healthy  |  重要 | 看 AD 非病灶皮膚是否已經異常  |
+| PSO_NL vs Healthy |  重要 | 看 PSO 非病灶皮膚是否已經異常 |
+| PSO_LS vs AD_LS   |  重要 | 比較兩種疾病在病灶狀態下的差異   |
+
+其中 `AD_NL vs Healthy` 你們已經做完了，所以現在要補：
+
+```text
+6. PSO_NL vs Healthy
+7. PSO_LS vs AD_LS
+```
+
+這兩個對後面的「病灶化風險分層」和「AD/PSO 分類」都很有幫助。
+
+---
+
+## 第三層：補充比較，可做但不是第一優先
+
+| 比較               |   重要性 | 目的                  |
+| ---------------- | ----: | ------------------- |
+| PSO_NL vs AD_NL  |    補充 | 看兩種疾病在非病灶狀態下是否已經不同  |
+| Overlap analysis | 補充但有用 | 找 AD/PSO 共同或相反的發炎基因 |
+
+`PSO_NL vs AD_NL` 很有研究價值，但它的解讀會比 `PSO_LS vs AD_LS` 難一點，因為 NL 本身是比較模糊的中間狀態。
+
+所以它可以做，但不要一開始就把它當主角。
+
+---
+
+# 三、最推薦你現在的實作順序
+
+你現在已完成：
+
+```text
+1. AD_LS vs AD_NL
+2. AD_LS vs Healthy
+3. AD_NL vs Healthy
+```
+
+接下來照這個順序做最穩：
+
+```text
+Step 1：PSO_LS vs PSO_NL
+Step 2：PSO_LS vs Healthy
+Step 3：PSO_NL vs Healthy
+Step 4：PSO_LS vs AD_LS
+Step 5：PSO_NL vs AD_NL
+Step 6：Overlap analysis
+```
+
+原因是：
+
+前三個可以補齊 PSO 內部分析；第四個可以做 AD/PSO 疾病差異；第五個是補充；最後再做 overlap，因為 overlap 需要前面的 DEG list 都先產生。
+
+---
+
+# 四、哪些結果之後最可能用到？
+
+如果你們最後要做「疾病分類 + LS/NL/Healthy + NL 病灶化風險」，最可能會用到的是這些：
+
+## 1. 做 AD vs PSO 疾病分類
+
+最可能用：
+
+```text
+PSO_LS vs AD_LS
+PSO_NL vs AD_NL
+```
+
+尤其是：
+
+```text
+PSO_LS vs AD_LS
+```
+
+因為兩者都是病灶，能比較乾淨地看疾病差異。
+
+---
+
+## 2. 做 LS vs NL 病灶狀態分類
+
+最可能用：
+
+```text
+AD_LS vs AD_NL
+PSO_LS vs PSO_NL
+```
+
+這兩個可以找出「病灶化」相關特徵。
+
+---
+
+## 3. 做 NL vs Healthy 早期異常分析
+
+最可能用：
+
+```text
+AD_NL vs Healthy
+PSO_NL vs Healthy
+```
+
+這兩個對你們的核心故事很重要：
+
+> NL 外觀看似正常，但在基因表現上可能已經偏離 Healthy。
+
+---
+
+## 4. 做共同發炎路徑
+
+最可能用：
+
+```text
+AD_LS vs Healthy
+PSO_LS vs Healthy
+overlap
+```
+
+這可以找出 AD 和 PSO 的共同發炎 signature。
+
+---
+
+# 五、Overlap 不用一開始做太複雜
+
+你現在列的 overlap 是：
+
+```text
+AD_LS_up ∩ PSO_LS_up
+AD_LS_down ∩ PSO_LS_down
+AD_LS_up ∩ PSO_LS_down
+AD_LS_down ∩ PSO_LS_up
+```
+
+這是正確的。
+
+但我建議先做最有解釋力的兩個：
+
+```text
+AD_LS_up ∩ PSO_LS_up
+AD_LS_down ∩ PSO_LS_down
+```
+
+這兩個代表：
+
+```text
+共同上升基因：共同發炎 / 免疫活化特徵
+共同下降基因：共同皮膚功能下降 / 屏障異常特徵
+```
+
+另外兩個：
+
+```text
+AD_LS_up ∩ PSO_LS_down
+AD_LS_down ∩ PSO_LS_up
+```
+
+也可以做，但比較像疾病特異或相反調控基因，解釋會比較複雜。
+
+所以順序可以是：
+
+```text
+先做 common up / common down
+再做 opposite direction
+```
+
+---
+
+# 六、你可以跟老師或學長姐這樣說
+
+你可以說：
+
+> 目前我們規劃先把 GSE121212 中 AD_LS、AD_NL、PSO_LS、PSO_NL 和 Healthy 五組樣本的主要 DEG 比較完整跑出來。雖然目前尚未確定所有結果都會放入最終模型，但這些比較可以作為 exploratory analysis，幫助我們後續選擇重要基因、進行 pathway enrichment，以及建立 disease classification、skin-state classification 和 NL lesional-like risk stratification。最後報告時會聚焦在核心比較，例如 AD_LS vs AD_NL、PSO_LS vs PSO_NL、AD_LS/PSO_LS vs Healthy，以及 PSO_LS vs AD_LS，其餘比較作為補充或輔助解釋。
+
+---
+
+# 七、結論
+
+**不會太多，可以做。**
+
+但你要記住：
+
+```text
+實作時可以多做一點，報告時不要全部平均呈現。
+```
+
+你現在的策略應該是：
+
+```text
+先完整跑出 8 組 DESeq2 結果
+再做 overlap
+再根據 DEG 數量、重要基因、pathway enrichment 結果，決定哪些放主文，哪些放補充
+```
+
+一句話講：
+
+> 現階段多做是合理的，因為你們是在探索資料；但最後要收斂成 3～4 個主線比較，才不會讓專題看起來發散。
