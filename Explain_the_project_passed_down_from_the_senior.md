@@ -1905,3 +1905,597 @@ AD_LS_down ∩ PSO_LS_up
 一句話講：
 
 > 現階段多做是合理的，因為你們是在探索資料；但最後要收斂成 3～4 個主線比較，才不會讓專題看起來發散。
+
+---
+
+# Q4：這是學姊有先做的兩頁分析圖
+# A4：
+對，這兩頁就是學姊已經先做的 **ssGSEA / pathway enrichment 初步結果圖**，它們不是 DESeq2 的 DEG 表格，而是把基因表現資料轉成「免疫路徑或免疫細胞特徵分數」後，再用熱圖看不同樣本群是否有分群趨勢。
+
+你可以把這兩張圖理解成：
+
+> 第一張：看「各種免疫相關 pathway」在所有樣本中的活化程度。
+> 第二張：看「免疫細胞浸潤相關 gene set」在所有樣本中的相對強弱。
+
+---
+
+# 第一張圖在做什麼？
+
+標題下面寫：
+
+> 圖、所有資料與各種免疫相關 pathway 的富集分析
+
+這張圖本質上是 **pathway enrichment score heatmap**。
+
+它的資料流應該是：
+
+```text
+RNA-seq expression matrix
+→ 轉成 TPM 或 normalized expression
+→ 用免疫相關 pathway gene sets 做 ssGSEA / GSVA
+→ 得到每個 sample 的 pathway enrichment score
+→ 畫 heatmap
+```
+
+所以這張不是在看單一基因，而是在看：
+
+> 每個樣本中，某條免疫 pathway 整體活化程度高不高。
+
+---
+
+## 這張熱圖的橫軸是什麼？
+
+橫軸是 **樣本 sample**。
+
+每一個小直欄代表一個病人的一個皮膚樣本，例如：
+
+```text
+AD_LS
+AD_NL
+PSO_LS
+PSO_NL
+Healthy
+```
+
+上方有兩條 annotation 色條：
+
+```text
+group
+patient_condition
+```
+
+右邊圖例顯示：
+
+### group
+
+```text
+healthy
+lesional
+non-lesional
+```
+
+也就是：
+
+```text
+Healthy
+LS
+NL
+```
+
+### patient_condition
+
+```text
+AD
+CTRL
+PSO
+```
+
+也就是：
+
+```text
+異位性皮膚炎
+健康控制組
+乾癬
+```
+
+所以這張圖同時標示了兩件事：
+
+```text
+這個樣本是 LS / NL / Healthy？
+這個樣本來自 AD / PSO / CTRL？
+```
+
+---
+
+## 這張熱圖的縱軸是什麼？
+
+縱軸是 **免疫相關 pathway / gene set**。
+
+你圖片上右側 pathway 名稱很密，看不清楚，但可以判斷是很多免疫或發炎相關路徑，例如 cytokine、immune signaling、apoptosis、antigen presentation、interferon、T cell activation 這類。
+
+每一列代表一個 pathway。
+
+---
+
+## 顏色代表什麼？
+
+右邊色階大概是：
+
+```text
+藍色：score 較低
+黃色：接近平均
+紅色：score 較高
+```
+
+通常這種熱圖會先做 row scaling，也就是每個 pathway 自己標準化成 Z-score。
+
+所以紅色不一定代表絕對表現量很高，而是代表：
+
+> 這個樣本在這條 pathway 上，相對其他樣本比較高。
+
+藍色則代表：
+
+> 這個樣本在這條 pathway 上，相對其他樣本比較低。
+
+---
+
+## 這張圖可以看什麼？
+
+主要看三件事：
+
+### 1. 樣本是否會依照疾病或皮膚狀態分群
+
+上方有 clustering tree。
+
+如果同一類樣本集中在一起，例如：
+
+```text
+LS 樣本聚在一起
+Healthy 樣本聚在一起
+PSO 樣本聚在一起
+AD 樣本聚在一起
+```
+
+代表這些 immune pathway scores 確實能區分不同狀態。
+
+這對你們後續建模型很重要，因為它表示：
+
+> 免疫 pathway 特徵可能有分類能力。
+
+---
+
+### 2. LS 是否比 NL / Healthy 有更高免疫活化
+
+如果你看到 lesional 區塊比較多紅色，通常表示：
+
+```text
+LS 樣本的免疫 pathway 活化較強
+```
+
+這符合預期，因為病灶皮膚本來就有明顯發炎。
+
+---
+
+### 3. NL 是否已經偏離 Healthy
+
+這點最重要。
+
+如果 non-lesional 的顏色不是完全像 healthy，而是介於 healthy 和 lesional 之間，代表：
+
+```text
+NL 外觀看似正常，但免疫 pathway 已經有部分活化
+```
+
+這就能支撐你們的「病灶化風險分層」故事。
+
+---
+
+# 第二張圖在做什麼？
+
+第二張圖標題寫：
+
+> 免疫細胞浸潤相關基因集 ssGSEA 熱圖
+
+這張就更明確了。
+
+它是在看：
+
+> 每個樣本中，不同免疫細胞相關 signature 的 ssGSEA score。
+
+也就是你們不只是看 pathway，而是看「哪些免疫細胞特徵比較強」。
+
+---
+
+## 第二張圖的橫軸
+
+一樣是樣本。
+
+上方一樣有：
+
+```text
+group：healthy / lesional / non-lesional
+patient_condition：AD / CTRL / PSO
+```
+
+所以可以比較：
+
+```text
+AD_LS
+AD_NL
+PSO_LS
+PSO_NL
+Healthy
+```
+
+---
+
+## 第二張圖的縱軸
+
+縱軸是免疫細胞 signature，例如你圖中可以看到：
+
+```text
+Monocytes_classical_core
+MDSC_total_optional
+Monocytes_total_core
+MDSC_optional
+Macrophage_M1_like_optional
+Plasma_cells_core
+Mast_cells_core
+PMN_MDSC_optional
+DC_total_core
+cDC2_core
+Eosinophils_core
+Th17_optional
+T_exhausted_CD8_optional
+Th1_optional
+NK_cells_core
+Pan_T_core
+CD8_T_total_core
+NKT_cells_optional
+B_cells_total_core
+pDC_core
+Treg_core
+CD4_T_total_core
+Basophils_core
+Macrophages_total_core
+Neutrophils_core
+Macrophage_M2_like_optional
+Th2_optional
+cDC1_core
+```
+
+這些不是單一細胞數，而是：
+
+> 由一組代表該免疫細胞的 marker genes 算出來的 enrichment score。
+
+例如：
+
+```text
+Th17_optional 高
+```
+
+代表這個樣本裡面 Th17 相關基因表現整體偏高。
+
+```text
+Macrophage_M1_like_optional 高
+```
+
+代表 M1-like macrophage 發炎型巨噬細胞特徵較強。
+
+---
+
+# 第二張圖跟你們研究主題的關係
+
+這張圖非常重要，因為你們專題後面如果要做模型，**ssGSEA immune scores 很適合當 feature**。
+
+原本基因表現資料可能有一萬多個基因：
+
+```text
+sample × 20000 genes
+```
+
+但 ssGSEA 後變成：
+
+```text
+sample × 20~100 immune signatures
+```
+
+這樣比較容易：
+
+```text
+1. 解釋
+2. 畫圖
+3. 建模
+4. 做 SHAP
+5. 跟 AD / PSO 免疫機制連結
+```
+
+---
+
+# 這兩張圖和 DESeq2 的差別
+
+你要很清楚分辨：
+
+| 分析                 | 看的是什麼                               | 輸出                              |
+| ------------------ | ----------------------------------- | ------------------------------- |
+| DESeq2             | 單一基因差異                              | DEGs，例如 IL13、IL17A、KRT16        |
+| Pathway enrichment | DEG 集合富集在哪些功能                       | GO/KEGG/Reactome pathway        |
+| ssGSEA heatmap     | 每個樣本的 pathway / immune signature 分數 | 每個樣本一個 score                    |
+| ML model           | 用特徵預測分類                             | AD/PSO、LS/NL/Healthy、risk score |
+
+所以學姊這兩張圖比較像是：
+
+```text
+DESeq2 之外的功能層級分析
+```
+
+它可以幫你們回答：
+
+```text
+不同樣本群在免疫 pathway 和 immune cell signatures 上是否有分群？
+```
+
+---
+
+# 這兩張圖目前有什麼問題？
+
+以投影片呈現來看，這兩張圖有幾個需要改進的地方。
+
+## 問題 1：第一張太密，看不清楚 pathway 名稱
+
+第一張 pathway 太多，文字擠在一起，觀眾很難看懂。
+
+建議後面正式報告不要直接放全部 pathway。
+
+可以改成：
+
+```text
+只挑 top 20 或 top 30 immune pathways
+```
+
+例如挑：
+
+```text
+變異度最高的 pathway
+AD/PSO 差異最大的 pathway
+LS/NL 差異最大的 pathway
+跟免疫相關最強的 pathway
+```
+
+---
+
+## 問題 2：熱圖沒有標出主要分群區塊
+
+現在觀眾只能自己看顏色，很難知道結論。
+
+建議加上註解，例如：
+
+```text
+Lesional samples show higher inflammatory pathway activity.
+Healthy controls cluster separately from disease samples.
+Non-lesional samples show intermediate immune activation.
+```
+
+中文可以寫：
+
+```text
+病灶樣本呈現較高發炎與免疫活化特徵
+健康樣本與疾病樣本有明顯區隔
+非病灶樣本呈現介於健康與病灶之間的免疫活化狀態
+```
+
+---
+
+## 問題 3：第二張圖比較好，但要補統計檢定
+
+熱圖只能看趨勢，不能只靠熱圖說「顯著不同」。
+
+後面最好補：
+
+```text
+boxplot + Wilcoxon test
+```
+
+例如針對幾個重要 signature：
+
+```text
+Th17 score
+Th2 score
+Macrophage M1-like score
+Neutrophil score
+Eosinophil score
+Treg score
+```
+
+比較：
+
+```text
+AD_LS vs AD_NL
+PSO_LS vs PSO_NL
+AD_LS vs Healthy
+PSO_LS vs Healthy
+PSO_LS vs AD_LS
+```
+
+這樣比較有說服力。
+
+---
+
+# 這兩張圖怎麼接到你現在要做的 8 組 DESeq2？
+
+你現在要做的是：
+
+```text
+1. AD_LS vs AD_NL
+2. AD_LS vs Healthy
+3. AD_NL vs Healthy
+4. PSO_LS vs PSO_NL
+5. PSO_LS vs Healthy
+6. PSO_NL vs Healthy
+7. PSO_LS vs AD_LS
+8. PSO_NL vs AD_NL
+```
+
+這是 **基因層級 DEG 分析**。
+
+學姊這兩張圖是 **pathway / immune signature 層級分析**。
+
+兩者可以這樣串起來：
+
+```text
+DESeq2：
+找出哪些基因不同
+        ↓
+Pathway enrichment：
+這些基因集中在哪些免疫路徑
+        ↓
+ssGSEA：
+把每個樣本轉成免疫路徑分數
+        ↓
+ML model：
+用這些分數做分類與風險分層
+```
+
+所以你現在補完 8 組 DEG，不是在重做學姊的圖，而是在補齊另一條主線。
+
+---
+
+# 你可以怎麼解釋第一張圖？
+
+你報告時可以這樣講：
+
+> 此圖為所有樣本在免疫相關 pathway 上的 ssGSEA enrichment score heatmap。橫軸為樣本，並依照 group，也就是 healthy、lesional、non-lesional，以及 patient condition，也就是 AD、PSO、CTRL 進行標註；縱軸為不同免疫相關 pathway。顏色代表該 pathway 在各樣本中的相對活化程度，紅色表示 enrichment score 較高，藍色表示較低。初步結果顯示，不同疾病與皮膚狀態在免疫 pathway 活化程度上具有可分辨的差異，表示 immune pathway scores 可能可作為後續分類模型與病灶化風險分層的特徵。
+
+---
+
+# 你可以怎麼解釋第二張圖？
+
+可以這樣講：
+
+> 此圖為免疫細胞浸潤相關 gene set 的 ssGSEA 熱圖。縱軸包含 monocytes、macrophages、dendritic cells、Th1、Th2、Th17、Treg、neutrophils 等免疫細胞 signature，橫軸為不同皮膚樣本。透過 ssGSEA，可將每個樣本的基因表現資料轉換為免疫細胞相關分數，進一步比較 AD、PSO、LS、NL 與 healthy controls 之間的免疫浸潤差異。此結果可作為後續機器學習模型的免疫特徵輸入。
+
+---
+
+# 你現在要接續學姊的工作，應該問她什麼？
+
+你可以直接問學姊這幾個問題：
+
+```text
+1. 這兩張 heatmap 的輸入資料是 TPM、FPKM、VST，還是其他 normalized expression？
+2. ssGSEA 使用的是哪一套 gene set？例如 CIBERSORT、xCell、MSigDB、LM22，還是自訂 immune cell signatures？
+3. heatmap 顏色是原始 ssGSEA score，還是 row Z-score？
+4. 第一張 pathway heatmap 是用哪些 pathway database？GO、KEGG、Reactome、Hallmark？
+5. 是否已經有輸出的 ssGSEA score matrix？
+6. 樣本 metadata 是否已經整理好 AD_LS、AD_NL、PSO_LS、PSO_NL、Healthy？
+7. 目前是否已經做過統計比較，例如 AD_LS vs AD_NL 的 Th2 score 是否顯著上升？
+8. 這些 ssGSEA 分數後續是否打算拿來做 ML feature？
+```
+
+這些問題問完，你就知道她做的圖能不能直接接到你後面的模型。
+
+---
+
+# 對你來說，現在最重要的是什麼？
+
+你現在不用急著重畫這兩張圖。你要先確認三件事。
+
+## 第一，學姊有沒有留下 ssGSEA score matrix
+
+你要找類似這種檔案：
+
+```text
+ssgsea_scores.csv
+immune_cell_scores.csv
+pathway_scores.csv
+gsva_result.csv
+```
+
+格式可能長這樣：
+
+| sample   |  Th1 |  Th2 | Th17 | Monocyte | Macrophage |
+| -------- | ---: | ---: | ---: | -------: | ---------: |
+| sample_1 | 0.23 | 0.78 | 0.31 |     0.66 |       0.54 |
+
+如果有，這個檔案非常重要，因為它可以直接當模型特徵。
+
+---
+
+## 第二，學姊有沒有留下 DESeq2 結果
+
+你要找：
+
+```text
+AD_LS_vs_AD_NL.csv
+AD_LS_vs_Healthy.csv
+AD_NL_vs_Healthy.csv
+```
+
+你剛剛說這三個上週已做完，所以應該要拿到這些結果。
+
+---
+
+## 第三，學姊有沒有留下 R script
+
+你要找：
+
+```text
+DESeq2_analysis.R
+ssGSEA_analysis.R
+heatmap.R
+GSVA.R
+```
+
+比結果更重要的是程式碼。因為有程式碼你才能：
+
+```text
+用同樣標準補做 PSO 的比較
+用同樣門檻做 overlap
+用同樣資料產生後續模型特徵
+```
+
+---
+
+# 你現在的下一步建議
+
+按照你現在的進度，我建議你做這個順序：
+
+```text
+Step 1：拿到學姊的 metadata、count matrix、DESeq2 script、ssGSEA script
+
+Step 2：確認 AD_LS vs AD_NL、AD_LS vs Healthy、AD_NL vs Healthy 的 DEG 門檻
+
+Step 3：用同一份 script 補跑：
+PSO_LS vs PSO_NL
+PSO_LS vs Healthy
+PSO_NL vs Healthy
+PSO_LS vs AD_LS
+PSO_NL vs AD_NL
+
+Step 4：整理每組 DEG 數量：
+up genes、down genes、total DEGs
+
+Step 5：做 AD_LS vs Healthy 和 PSO_LS vs Healthy 的 overlap
+
+Step 6：確認 ssGSEA scores 是否能接到 ML model
+```
+
+---
+
+# 你可以把目前狀態整理成這樣
+
+你可以跟組員或老師說：
+
+> 目前學姊已完成兩類初步 functional-level 分析：第一是所有樣本在免疫相關 pathway 上的 ssGSEA enrichment heatmap；第二是免疫細胞浸潤相關 gene set 的 ssGSEA heatmap。這些結果顯示不同疾病與皮膚狀態在免疫路徑及免疫細胞 signature 上存在可分辨的差異，可作為後續機器學習模型的特徵來源。目前我們接續的工作是補齊 gene-level 的 DESeq2 DEG 比較，包括 PSO_LS vs PSO_NL、PSO_LS vs Healthy、PSO_NL vs Healthy、PSO_LS vs AD_LS、PSO_NL vs AD_NL，並進一步進行 AD-vs-Healthy 與 PSO-vs-Healthy 的 DEG overlap 分析。
+
+---
+
+# 一句話結論
+
+這兩張圖是學姊已經做好的 **免疫 pathway / 免疫細胞 signature 層級的初步分析**；你現在要做的 8 組 DESeq2 是 **基因層級的差異分析**。兩者不是重複，而是互補：
+
+```text
+DESeq2：找差異基因
+ssGSEA heatmap：看免疫功能分數
+Overlap：找共同與疾病特異基因
+ML model：用基因或免疫分數做分類與風險分層
+```
