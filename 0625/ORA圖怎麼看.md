@@ -1,6 +1,8 @@
 可以，把這張圖當成「每一個圓點代表一條 pathway」來看會最簡單。
 
-### ORA dot plot 讀圖方式
+---
+
+# ORA dot plot 讀圖方式
 
 * **每一個圓點代表一條 pathway**
 
@@ -41,6 +43,8 @@
 * 顏色較黃：BH adjusted P 較小
 
 但不能只看其中一項，也不能把 ORA 結果直接解讀成因果關係或 pathway 活性增加的倍數。
+
+---
 
 ## 用你的 Hallmark 圖舉例
 
