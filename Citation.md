@@ -512,6 +512,180 @@ Q 統一以 **2025 JCR/JIF quartile** 為主。
 
 如果按這個版本改，我認為你的 **Results & Discussion citation chain 已經會比單純亂塞一堆 2025 paper 扎實很多**：
 
+---
+
+# 關於[26]換文獻引用
+
+有。我重新把這條線往 **PVRL4 / NECTIN4 / psoriasis / keratinocyte junction** 查了一輪後，找到一篇我認為**比 Nakajima 2024 更適合支撐你目前那句話，而且引用數也明顯更高**的文獻：
+
+> **Li J, Xing J, Lu F, et al.**
+> ***Psoriatic Dermal-derived Mesenchymal Stem Cells Reduce Keratinocyte Junctions, and Increase Glycolysis.***
+> **Acta Dermato-Venereologica. 2020;100:adv00122.**
+>
+> DOI: `10.2340/00015555-3480`
+
+它目前在 OpenAlex 約 **32 次引用**，而 *Acta Dermato-Venereologica* 在最新 JCR Dermatology 是 **Q1**。
+
+而且最重要的是，它不是泛泛講 psoriasis 的 adhesion。
+
+它**真的測到 PVRL4，也就是 Nectin-4**：
+
+> psoriatic dermal-derived mesenchymal stem cells 處理正常 human epidermal keratinocytes 後，**PVRL4 protein expression 顯著下降**，同時多個 cell-junction-associated proteins 下降，而且 keratinocyte junctions 本身也減弱。
+
+所以如果你現在那句是：
+
+> *Nectin/Necl trans heterodimerization is related to cell–cell adhesion and junctional abnormalities in psoriatic skin.*
+
+那麼 **Li 2020 其實比 Nakajima 2024 更貼近「cell-junction abnormality」這半句。**
+
+---
+
+## 兩篇怎麼比較
+
+| 項目                              | **Li et al. 2020**                                       | **Nakajima et al. 2024**                  |
+| ------------------------------- | -------------------------------------------------------- | ----------------------------------------- |
+| 期刊                              | *Acta Dermato-Venereologica*                             | *International Journal of Dermatology*    |
+| JCR                             | **Q1**                                                   | **Q1**                                    |
+| 引用數                             | **約 32** OpenAlex                                        | 目前很少／近乎 0                                 |
+| 直接研究 psoriasis                  | ✅                                                        | ✅                                         |
+| 直接涉及 Nectin-4/PVRL4             | ✅ **PVRL4**                                              | ✅ **Nectin-4**                            |
+| 直接涉及 keratinocyte junction      | **✅ 很直接**                                                | ⚠️ 沒有直接測 junction 功能                      |
+| Human lesional psoriasis tissue | ❌ 主要是 psoriatic DMSC–NHEK co-culture                     | **✅**                                     |
+| 證據類型                            | mechanistic / proteomic / functional junction experiment | human lesion expression preliminary study |
+| 對你目前句子的適合度                      | **很高**                                                   | **很高，但支撐的是 expression association**       |
+
+所以其實兩篇**各有一個對方沒有的優勢**。
+
+### Li 2020 的優勢
+
+> **PVRL4 + psoriasis context + cell-junction alteration**
+
+### Nakajima 2024 的優勢
+
+> **真正的人類 psoriasis lesional skin + Nectin-4 expression**
+
+因此，我現在最喜歡的方案甚至不是單純把 Nakajima 換掉，而是**兩篇一起引用，但是把句子寫得精確一點**：
+
+> **Nectin/Necl trans heterodimerization represents cell–cell adhesion biology. Psoriasis-related alterations in this axis are supported by reduced PVRL4/NECTIN4 expression together with impaired keratinocyte junctions in a psoriasis-associated co-culture model, while altered Nectin-4 expression has also been observed directly in human psoriatic lesional keratinocytes [Li et al., 2020; Nakajima et al., 2024].**
+
+這樣證據鏈就完整很多：
+
+**functional junction evidence**
+
+→ Li 2020
+
+＋
+
+**human psoriasis tissue evidence**
+
+→ Nakajima 2024
+
+而不是要求一篇 paper 同時完成所有事情。
+
+---
+
+## 不過有一個細節要非常小心
+
+兩篇的 **Nectin-4 expression direction 不一樣**。
+
+### Li 2020
+
+> psoriatic DMSC-treated keratinocytes → **PVRL4 decreased**
+
+### Nakajima 2024
+
+> human psoriatic lesional keratinocytes → **Nectin-4 increased**
+
+這不一定矛盾，因為：
+
+* 一個是 **co-culture model**
+* 一個是 **actual lesional tissue**
+* experimental context 完全不同
+
+但因此你**絕對不能**寫：
+
+> Nectin-4 is consistently increased/decreased in psoriasis.
+
+目前文獻不支持這種話。
+
+你應該寫成：
+
+> **altered / dysregulated Nectin-4-related cell-adhesion biology**
+
+這樣才忠實反映證據。
+
+---
+
+## 我也特別找了你想要的那種更高階文獻
+
+我也特別找了：
+
+> **2021–2026、Nature Communications / JID / BJD / Cell Death & Disease 等更頂、引用數又高，而且直接講 Nectin/PVRL4 + psoriasis。**
+
+目前**沒有找到一篇能比 Li 2020 更直接地同時滿足這幾個條件**。
+
+例如 2022 *Cell Death & Disease* 的 psoriasis keratinocyte review 已經有約 **660 citations**，而且是 Q1；但我直接搜尋全文：
+
+* **沒有 `nectin`**
+* **沒有 `PVRL4`**
+
+它確實談 psoriasis 的 keratinocyte biology，也談 junction-related Connexin-43，但不能拿它來假裝支持 Nectin。
+
+2023/2024 的一些 *Nature Communications* psoriasis single-cell papers 也很強，例如研究：
+
+* keratinocyte–fibroblast interaction
+* cell–cell communication
+
+但我目前沒有找到它們明確把 **NECTIN/PVRL4** 定位成 psoriasis signal。
+
+所以我不會為了「Nature Communications」四個字硬換掉直接證據。
+
+---
+
+# 我現在會怎麼選
+
+如果你只能留 **1 篇**：
+
+> **改用 Li et al. 2020。**
+
+因為你的 pathway 是：
+
+> **Nectin/Necl trans heterodimerization**
+
+而你那段又在講：
+
+> **cell–cell adhesion / junctional abnormalities**
+
+Li 2020 直接包含：
+
+* **PVRL4**
+* **cell junction assembly**
+* **psoriasis-related keratinocyte model**
+
+而且已有約 **32 citations、JCR Q1**。
+
+如果 references 空間允許，我會用：
+
+> **Li 2020 + Nakajima 2024**
+
+因為：
+
+* 前者補 **functional / junction evidence**
+* 後者補 **direct human-lesional evidence**
+
+---
+
+## [26] Reference 建議升級版本
+
+因此你原本 **[26]** 如果想升級，我會把主要 reference 改成：
+
+> **J. Li, J. Xing, F. Lu, et al., Psoriatic dermal-derived mesenchymal stem cells reduce keratinocyte junctions, and increase glycolysis, Acta Derm. Venereol. 100, adv00122 (2020). doi:10.2340/00015555-3480.**
+
+* **引用數：約 32（OpenAlex）**
+* **JCR：Q1**
+
+Nakajima 2024 則可以視頁數決定要不要一起留，而不是把它當成唯一的 Nectin evidence。
+
 * 自己的數據保持乾淨
 * biological interpretation 才引用外部研究
 * database evidence 引用原始資料庫
